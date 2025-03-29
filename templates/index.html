@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ecodisseny - Inici</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .logo {
+        max-width: 200px;
+      }
+      .container {
+        padding-top: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container text-center">
+      <img
+        src="{% static 'logo_ecodisseny_positiu.png' %}"
+        alt="Logo Ecodisseny"
+        class="logo mb-4"
+      />
+      <h1 class="mb-3">Benvinguts a Ecodisseny</h1>
+      <p class="lead">Aplicació de gestió interna</p>
+      <a href="/admin/" class="btn btn-dark mt-4">Accedir a l'administració</a>
+    </div>
+  </body>
+</html>

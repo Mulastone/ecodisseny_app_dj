@@ -1,0 +1,27 @@
+/* ------------------------------
+   🎯 Botones personalizados
+------------------------------- */
+
+.btn,
+input[type="submit"] {
+    background-color: #495057 !important; /* Gris oscuro */
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 0.95rem !important;
+    padding: 6px 12px !important;
+    text-decoration: none !important;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.btn:hover,
+input[type="submit"]:hover {
+    background-color: #6c757d !important; /* Gris más claro al pasar el mouse */
+}
+
+.btn:active,
+input[type="submit"]:active {
+    background-color: #6c757d !important;
+    box-shadow: none !important;
+}
