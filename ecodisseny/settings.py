@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'pressupostos',
      "dal",
     "dal_select2",  # O el widget que prefieras
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -98,24 +99,54 @@ JAZZMIN_SETTINGS = {
     "site_logo": "logo_ecodisseny_negatiu.png",       # archivo en static/
     "login_logo": "logo_ecodisseny_positiu.png",
     "login_logo_dark": "logo_ecodisseny_positiu.png",
-    "site_logo_classes": "img-fluid",
+    "site_logo_classes": "img-fluid sidebar-logo",
+    "login_logo_classes": "img-fluid login-logo",      # ✅ NUEVA línea para el login
     "site_icon": "favicon.ico",                        # favicon en static/
     "welcome_sign": "Benvingut a l’administrador d’Ecodisseny!",
-    "copyright": "©  Ecodisseny - A.Rasmussen",
+    "copyright": "©  Ecodisseny - By A.Rasmussen",
     "show_sidebar": True,
-    "navigation_expanded": True,
-    "order_with_respect_to": ["auth", "clients", "maestros.Parroquia",
-    "maestros.Poblacio",
-    "maestros.Tipusrecurso",
-    "maestros.Recurso",
-    "maestros.Treballs",
-    "maestros.Tasca","pressupostos"],
+    "navigation_expanded": False,
+    "group_models": True,
+    "order_with_respect_to": [
+        "projectes",
+        "pressupostos",
+        "maestros",
+        "maestros.Clients",
+        "maestros.DepartamentClient",
+        "maestros.PersonaContactClient",
+        "maestros.Parroquia",
+        "maestros.Poblacio",
+        "maestros.Ubicacio",
+        "maestros.Tipusrecurso",
+        "maestros.Recurso",
+        "maestros.Treballs",
+        "maestros.Tasca",
+        "maestros.TasquesTreball",
+        "maestros.Desplacaments",
+        "maestros.Hores",
+         "auth",
+
+    ],
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.user": "fas fa-user",
         "auth.Group": "fas fa-users",
+        "maestros": "fas fa-cube",
         "maestros.Clients": "fas fa-building",
+        "maestros.Tasca": "fas fa-tasks",
+        "maestros.Treballs": "fas fa-trowel-bricks",
+        "maestros.TasquesTreball": "fas fa-wrench",
+        "maestros.Desplacaments": "fas fa-car",
+        "maestros.Hores": "fas fa-clock",
+        "maestros.Recurso": "fas fa-cogs",
+        "maestros.Tipusrecurso": "fas fa-cogs",
+        "maestros.DepartamentClient": "fas fa-building",
+        "maestros.PersonaContactClient": "fas fa-building-user",
+        "maestros.Parroquia": "fas fa-map-marker-alt",
+        "maestros.Poblacio": "fas fa-map-marker-alt",
+        "maestros.Ubicacio": "fas fa-map-marker-alt",
         "pressupostos.Pressupostos": "fas fa-file-invoice",
+        "projectes": "fas fa-project-diagram",
         "projectes.Projectes": "fas fa-project-diagram",
     },
     "topmenu_links": [
@@ -127,9 +158,14 @@ JAZZMIN_SETTINGS = {
         {"name": "Ajuda", "url": "https://ecodisseny.cat/ajuda", "new_window": True},
     ],
     "related_modal_active": True,
-    
 
+    "show_ui_builder": False,
+
+    # ✅ CSS personalizado para limitar tamaño del logo en login/logout
+    "custom_css": "css/admin_custom.css",
+    
 }
+
 
 # Ajustes de estilo Jazzmin
 JAZZMIN_UI_TWEAKS = {}

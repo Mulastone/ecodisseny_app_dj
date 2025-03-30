@@ -1,18 +1,26 @@
-/* Fondo blanco para filas alternadas */
-table tr,
-table tr:nth-child(odd),
-table tr:nth-child(even) {
-    background-color: white !important;
-    color: #000 !important;
+/* Limita altura del logo en login/logout */
+.login-logo img {
+    max-height: 100px;
+    width: auto;
 }
 
-/* Fondo blanco para la cabecera también */
-table thead {
-    background-color: #f8f9fa !important;
-    color: #212529 !important;
+/* 🔧 Logo en el sidebar: evita que genere scroll */
+.sidebar-logo {
+    max-height: 40px;   /* o 30px si quieres aún más compacto */
+    width: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
-/* Evitar que el hover las oscurezca */
-table tr:hover {
-    background-color: #f1f1f1 !important;
+/* Mejora de tabla de líneas para evitar scroll horizontal */
+fieldset.module.aligned table {
+    table-layout: auto !important;
+    width: 100% !important;
+    overflow-x: auto;
+    display: block;
+}
+
+.inline-group .tabular tr.form-row > td {
+    white-space: normal !important;
+    word-wrap: break-word;
 }
