@@ -1,154 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-    function esLineaValida(row) {
-        const requiredFields = [
-            'id_treball', 'id_tasca', 'quantitat', 'id_recurso', 'total_linea'
-        ];
-
-        return requiredFields.every(name => {
-            const input = row.querySelector(`[name*="${name}"]`);
-            return input && input.value !== '';
-        });
-    }
-
-    function actualizarTotalPressupost() {
-        let total = 0;
-
-        // Limpiar resaltado anterior
-        document.querySelectorAll(".linea-invalida").forEach(el => {
-            el.classList.remove("linea-invalida");
-        });
-
-        // Recorre todos los formularios inline
-        document.querySelectorAll('div.inline-related').forEach(row => {
-            if (esLineaValida(row)) {
-                const input = row.querySelector('input[name$="total_linea"]');
-                const valor = parseFloat(input.value.replace(",", "."));
-                if (!isNaN(valor)) total += valor;
-            } else {
-                row.classList.add("linea-invalida");
-            }
-        });
-
-        // Mostrar total
-        const display = document.getElementById("pressupost-total-display");
-        if (display) {
-            display.innerText = `Total del Pressupost: ${total.toFixed(2)} €`;
-        }
-    }
-
-    function enganxarListeners() {
-        document.querySelectorAll('input, select').forEach(input => {
-            input.addEventListener("input", actualizarTotalPressupost);
-            input.addEventListener("change", actualizarTotalPressupost);
-        });
-    }
-
-    // Añadir contenedor visual si no existe
-    const inlineGroup = document.querySelector("#pressupostoslineas_set-group");
-    if (inlineGroup && !document.getElementById("pressupost-total-display")) {
-        const display = document.createElement("div");
-        display.id = "pressupost-total-display";
-        display.style = "font-weight: bold; margin-top: 20px; font-size: 1.1em;";
-        inlineGroup.appendChild(display);
-    }
-
-    // Estilos para líneas incompletas
-    const style = document.createElement("style");
-    style.innerHTML = `
-        .linea-invalida {
-            background-color: #fff6f6 !important;
-            border-left: 4px solid #e3342f;
-        }
-    `;
-    document.head.appendChild(style);
-
-    // Ejecutar
-    enganxarListeners();
-    actualizarTotalPressupost();
-});
-
-// static/js/pressupostos_total.js
-
-document.addEventListener("DOMContentLoaded", function () {
-    const inlineRows = document.querySelectorAll(".dynamic-pressupostoslineas");
-
-    inlineRows.forEach(row => {
-        setupRowEvents(row);
-    });
-
-    function setupRowEvents(row) {
-        const tascaSelect = row.querySelector("select[id$='-id_tasca']");
-        const recursoSelect = row.querySelector("select[id$='-id_recurso']");
-        const horesSelect = row.querySelector("select[id$='-id_hora']");
-        const quantitatInput = row.querySelector("input[id$='-quantitat']");
-        const beneficiInput = row.querySelector("input[id$='-benefici_linea']");
-
-        [tascaSelect, recursoSelect, horesSelect, quantitatInput, beneficiInput].forEach(input => {
-            if (input) {
-                input.addEventListener("change", () => updateRowFields(row));
-            }
-        });
-    }
-
-    function updateRowFields(row) {
-        const tascaId = getValue(row, 'id_tasca');
-        const recursoId = getValue(row, 'id_recurso');
-        const horesId = getValue(row, 'id_hora');
-        const quantitat = parseFloat(getValue(row, 'quantitat')) || 0;
-        const beneficiPercent = parseFloat(getValue(row, 'benefici_linea')) || 0;
-
-        const parroquiaId = document.querySelector("#id_id_parroquia")?.value;
-        const ubicacioId = document.querySelector("#id_id_ubicacio")?.value;
-
-        if (tascaId && recursoId && horesId && parroquiaId && ubicacioId) {
-            // Get increment hores
-            fetch(`/pressupostos/ajax/get_increment_hores/?parroquia=${parroquiaId}&ubicacio=${ubicacioId}&tasca=${tascaId}`)
-                .then(response => response.json())
-                .then(data => {
-                    const increment = parseFloat(data.increment) || 0;
-                    row.querySelector("input[id$='-increment_hores']").value = increment;
-
-                    // Get dades recurs
-                    fetch(`/pressupostos/ajax/get_dades_recurs/?recurso=${recursoId}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const preuTancat = data.preu_tancat;
-                            const preuHora = parseFloat(data.preu_hora) || 0;
-
-                            setValue(row, 'preu_tancat', preuTancat);
-                            setValue(row, 'cost_hores', preuTancat ? 0 : preuHora);
-                            setValue(row, 'cost_tancat', preuTancat ? 0 : getValue(row, 'cost_tancat'));
-
-                            let hores = parseFloat(horesId) || 0;
-                            let horesTotales = preuTancat ? 0 : (hores + increment) * quantitat;
-                            let costHoresTotals = preuTancat ? 0 : preuHora * horesTotales;
-                            let subtotal = parseFloat(row.querySelector("input[id$='-cost_tancat']").value) || 0;
-
-                            subtotal += costHoresTotals;
-                            const benefici = (beneficiPercent / 100) * subtotal;
-                            const total = subtotal + benefici;
-
-                            setValue(row, 'hores_totales', horesTotales);
-                            setValue(row, 'cost_hores_totals', costHoresTotals);
-                            setValue(row, 'subtotal_linea', subtotal);
-                            setValue(row, 'total_linea', total);
-                        });
-                });
-        }
-    }
-
-    function getValue(row, name) {
-        const input = row.querySelector(`[id$='-${name}']`);
-        return input ? input.value : "";
-    }
-
-    function setValue(row, name, value) {
-        const input = row.querySelector(`[id$='-${name}']`);
-        if (input) input.value = (Math.round(value * 10000) / 10000).toFixed(4);
-    }
-});
-
-// static/js/pressupostos_total.js
 
 document.addEventListener('DOMContentLoaded', function () {
     const formsetPrefix = 'pressupostoslineas_set';
@@ -255,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(res => res.json())
                 .then(data => {
                     const selected = tascaField.value;
-                    tascaField.innerHTML = ''; // Clear
+                    tascaField.innerHTML = '';
                     data.forEach(t => {
                         const option = document.createElement('option');
                         option.value = t.id;
@@ -268,14 +117,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelectorAll('.dynamic-pressupostoslineas_set').forEach(row => {
-        row.addEventListener('change', e => {
-            const name = e.target.name;
-            if (!name) return;
+        const selects = row.querySelectorAll('select');
+        selects.forEach(select => {
+            select.addEventListener('change', e => handleChange(row, e));
+            $(select).on('select2:select', e => handleChange(row, e));
+        });
 
-            if (name.includes('id_recurso')) fetchRecurs(row);
-            if (name.includes('id_tasca')) fetchIncrement(row);
-            if (name.includes('id_treball')) filterTascaOptions(row);
-            if (name.includes('quantitat') || name.includes('benefici_linea') || name.includes('id_hora')) calcTotals(row);
+        row.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => calcTotals(row));
         });
     });
+
+    function handleChange(row, e) {
+        const name = e.target.name;
+        if (!name) return;
+
+        if (name.includes('id_recurso')) fetchRecurs(row);
+        if (name.includes('id_tasca')) fetchIncrement(row);
+        if (name.includes('id_treball')) filterTascaOptions(row);
+        if (name.includes('quantitat') || name.includes('benefici_linea') || name.includes('id_hora')) calcTotals(row);
+    }
 });
