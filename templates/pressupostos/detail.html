@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <h2 class="mb-4">Versions del Pressupost: {{ pressupost.nom_pressupost }}</h2>
+
+  <div class="mb-3">
+    <a href="{% url 'pressupostos:pdf_generate' pressupost.id %}" class="btn btn-success">
+      + Generar nova versió PDF
+    </a>
+    <a href="{% url 'pressupostos:list' %}" class="btn btn-secondary ms-2">Tornar a la llista</a>
+  </div>
+
+  {% if versions %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle bg-white">
+        <thead class="table-light">
+          <tr>
+            <th>Versió</th>
+            <th>Data generació</th>
+            <th>Usuari</th>
+            <th>Comentari</th>
+            <th>Accions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for version in versions %}
+            <tr>
+              <td>{{ version.version }}</td>
+              <td>{{ version.created_at|date:"d/m/Y H:i" }}</td>
+              <td>{{ version.generated_by }}</td>
+              <td>{{ version.comment|default:"-" }}</td>
+              <td>
+                <a href="{{ version.pdf.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                  📄 Veure PDF
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">Encara no hi ha cap versió PDF registrada per aquest pressupost.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

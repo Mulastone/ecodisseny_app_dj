@@ -23,6 +23,7 @@ INSTALLED_APPS = [
      "dal",
     "dal_select2",  # O el widget que prefieras
     'phonenumber_field',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -153,6 +154,10 @@ JAZZMIN_SETTINGS = {
         {"name": "Inici", "url": "/", "permissions": ["auth.view_user"]},
         {"model": "auth.User"},
         {"app": "auth"},
+        # Enlace al dashboard del admin
+        {"name": "Admin", "url": "admin:index", "permissions": ["auth.view_user"]},
+        # Enlace personalizado a test_base
+        {"name": "Pressupostos", "url": "/pressupostos/list", "new_window": True},
     ],
     "usermenu_links": [
         {"name": "Ajuda", "url": "https://ecodisseny.cat/ajuda", "new_window": True},
@@ -167,5 +172,23 @@ JAZZMIN_SETTINGS = {
 }
 
 
+
 # Ajustes de estilo Jazzmin
 JAZZMIN_UI_TWEAKS = {}
+
+
+
+LOGIN_REDIRECT_URL = '/admin/'  # o '/maestros/' o la vista principal de tu sistema
+LOGOUT_REDIRECT_URL = '/accounts/login/'
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "noreply@ecodisseny.local"
+
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.example.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'tu@email.com'
+# EMAIL_HOST_PASSWORD = 'tu_contraseña'
+# DEFAULT_FROM_EMAIL = 'webmaster@example.com'

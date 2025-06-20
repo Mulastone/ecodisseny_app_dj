@@ -1,4 +1,3 @@
-# maestros/urls.py
 from django.urls import path
 from dal import autocomplete
 from .models import PersonaContactClient, Poblacio
@@ -16,7 +15,6 @@ class PoblacioAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs
 
-
 class PersonaContactAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = PersonaContactClient.objects.all()
@@ -30,7 +28,13 @@ class PersonaContactAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs
 
+# Si vas a usar ProjectesAutocomplete, importa su clase:
+# from pressupostos.views import ProjectesAutocomplete
+
 urlpatterns = [
     path('poblacio-autocomplete/', PoblacioAutocomplete.as_view(), name='poblacio-autocomplete'),
     path('autocomplete/persona-contacte/', PersonaContactAutocomplete.as_view(), name='autocomplete_persona_contacte'),
+
+    # Descomenta si tienes esta clase en views:
+    # path('projectes-autocomplete/', ProjectesAutocomplete.as_view(), name='projectes-autocomplete'),
 ]

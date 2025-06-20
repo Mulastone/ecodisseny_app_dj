@@ -147,6 +147,12 @@ class Treballs(SafeSaveModel):
     datacreacio = models.DateTimeField(db_column='data_creacio', auto_now_add=True)
     datamodificacio = models.DateTimeField(db_column='data_modificacio', auto_now=True)
 
+    # Relación explícita ManyToMany con Tasca a través de TasquesTreball
+    tasques = models.ManyToManyField(
+        'Tasca',
+        through='TasquesTreball',
+        related_name='treballs'
+    )
 
     class Meta:
         managed = False

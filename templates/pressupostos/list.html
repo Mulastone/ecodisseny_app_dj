@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Pressupostos</h2>
+    <a href="{% url 'pressupostos:create' %}" class="btn btn-success">
+      + Nou pressupost
+    </a>
+  </div>
+
+  {% if pressupostos %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle bg-white">
+        <thead class="table-light">
+          <tr>
+            <th>Nom</th>
+            <th>Data</th>
+            <th>Client</th>
+            <th>Projecte</th>
+            <th>Parròquia</th>
+            <th>Ubicació</th>
+            <th class="text-center">Tancat</th>
+            <th class="text-center">Accions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pressupost in pressupostos %}
+            <tr>
+              <td>{{ pressupost.nom_pressupost }}</td>
+              <td>{{ pressupost.data_pressupost|date:"d/m/Y" }}</td>
+              <td>{{ pressupost.id_client }}</td>
+              <td>{{ pressupost.id_projecte }}</td>
+              <td>{{ pressupost.id_parroquia }}</td>
+              <td>{{ pressupost.id_ubicacio }}</td>
+              <td class="text-center">
+                {% if pressupost.tancat %}
+                  <span class="badge bg-success">Sí</span>
+                {% else %}
+                  <span class="badge bg-secondary">No</span>
+                {% endif %}
+              </td>
+              <td class="text-center d-flex justify-content-center gap-1 flex-wrap">
+                <a href="{% url 'pressupostos:edit' pressupost.pk %}" class="btn btn-sm btn-outline-primary" title="Editar">
+                  ✏️
+                </a>
+                <a href="{% url 'pressupostos:delete' pressupost.pk %}" class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Estàs segur que vols eliminar aquest pressupost?')" title="Eliminar">
+                  🗑️
+                </a>
+                <a href="{% url 'pressupostos:pdf' pressupost.pk %}" class="btn btn-sm btn-outline-secondary" title="Descarregar PDF" target="_blank">
+                  📄
+                </a>
+                
+                
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No hi ha pressupostos disponibles.</div>
+  {% endif %}
+</div>
+
+{% endblock %}

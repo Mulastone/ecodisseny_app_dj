@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid mt-5" id="pressupost-form">
+  <h2>{% if pressupost %}Editar{% else %}Nou{% endif %} Pressupost</h2>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+    {{ form.errors }}
+    {{ formset.non_form_errors }}
+    {% for linea_form in formset %}
+      {{ linea_form.errors }}
+    {% endfor %}
+
+    <table class="table table-bordered mb-3" style="background: #fff; width: 100%;">
+      {% if pressupost and pressupost.id_pressupost %}
+      <tr>
+        <td style="width:18%; font-weight:bold;">Núm. Pressupost:</td>
+        <td style="width:32%;">{{ pressupost.id_pressupost }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+      {% endif %}
+      <tr>
+        <td style="width:18%;">{{ form.nom_pressupost.label_tag }}</td>
+        <td style="width:32%;">{{ form.nom_pressupost }}</td>
+        <td style="width:18%;">{{ form.data_pressupost.label_tag }}</td>
+        <td style="width:32%;">{{ form.data_pressupost }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.id_client.label_tag }}</td>
+        <td>{{ form.id_client }}</td>
+        <td>{{ form.id_projecte.label_tag }}</td>
+        <td>{{ form.id_projecte }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.id_parroquia.label_tag }}</td>
+        <td>{{ form.id_parroquia }}</td>
+        <td>{{ form.id_ubicacio.label_tag }}</td>
+        <td>{{ form.id_ubicacio }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.observacions.label_tag }}</td>
+        <td colspan="3">{{ form.observacions }}</td>
+      </tr>
+      <tr>
+        <td>{{ form.tancat.label_tag }}</td>
+        <td>{{ form.tancat }}</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+
+    <hr>
+    <h4>Línies</h4>
+    <div class="table-responsive">
+      <table class="table table-bordered table-sm w-100 align-middle table-linia">
+        <thead>
+          <tr>
+            <th>Treball</th>
+            <th>Tasca</th>
+            <th>Recurs</th>
+            <th>Hores</th>
+            <th>Quantitat</th>
+            <th>Preu Tancat</th>
+            <th>Cost Tancat</th>
+            <th>Increment Hores</th>
+            <th>Hores Totals</th>
+            <th>Cost Hores</th>
+            <th>Cost Hores Totals</th>
+            <th>Subtotal</th>
+            <th>Benefici (%)</th>
+            <th>Total</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody id="lineas-container">
+          {{ formset.management_form }}
+          {% for linea_form in formset %}
+          <tr class="pressupost-linea">
+            {% for hidden in linea_form.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+            <td>{{ linea_form.id_treball }}</td>
+            <td>{{ linea_form.id_tasca }}</td>
+            <td>{{ linea_form.id_recurso }}</td>
+            <td>{{ linea_form.id_hora }}</td>
+            <td>{{ linea_form.quantitat }}</td>
+            <td>{{ linea_form.preu_tancat }}</td>
+            <td>{{ linea_form.cost_tancat }}</td>
+            <td>{{ linea_form.increment_hores }}</td>
+            <td>{{ linea_form.hores_totales }}</td>
+            <td>{{ linea_form.cost_hores }}</td>
+            <td>{{ linea_form.cost_hores_totals }}</td>
+            <td>{{ linea_form.subtotal_linea }}</td>
+            <td>{{ linea_form.benefici_linea }}</td>
+            <td>{{ linea_form.total_linea }}</td>
+            <td>
+              {% if formset.can_delete %}
+                {{ linea_form.DELETE }}
+              {% endif %}
+              <button type="button" class="btn btn-outline-danger btn-sm eliminar-linea">🗑️</button>
+            </td>
+          </tr>
+          {% endfor %}
+
+          <tr id="empty-form" style="display:none;">
+            {% for hidden in formset.empty_form.hidden_fields %}
+              {{ hidden }}
+            {% endfor %}
+            {% for field in formset.empty_form.visible_fields %}
+              <td>{{ field }}</td>
+            {% endfor %}
+            <td>
+              {% if formset.can_delete %}
+                {{ formset.empty_form.DELETE }}
+              {% endif %}
+              <button type="button" class="btn btn-outline-danger btn-sm eliminar-linea">🗑️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mb-3">
+      <button type="button" id="add-linea" class="btn btn-outline-success">
+        + Afegir línia
+      </button>
+    </div>
+
+    <div class="text-end mt-4">
+      <h5>Total Pressupost: <span id="total-pressupost">0.00</span> €</h5>
+    </div>
+
+    <div class="d-flex justify-content-between mt-4">
+      <a href="{% url 'pressupostos:list' %}" class="btn btn-secondary">Tornar</a>
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
+</div>
+
+{% block extra_scripts %}
+<script src="{% static 'js/pressupostos.js' %}"></script>
+{% endblock %}
+{% endblock %}

@@ -1,10 +1,9 @@
 /* ------------------------------
    🎯 Botones personalizados
 ------------------------------- */
-
 .btn,
 input[type="submit"] {
-    background-color: #495057 !important; /* Gris oscuro */
+    background-color: #495057 !important;
     color: white !important;
     border: none !important;
     border-radius: 5px !important;
@@ -17,11 +16,172 @@ input[type="submit"] {
 
 .btn:hover,
 input[type="submit"]:hover {
-    background-color: #6c757d !important; /* Gris más claro al pasar el mouse */
+    background-color: #6c757d !important;
 }
 
 .btn:active,
 input[type="submit"]:active {
     background-color: #6c757d !important;
     box-shadow: none !important;
+}
+
+/* ------------------------------
+   📄 Formulario principal
+------------------------------- */
+#pressupost-form {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* ------------------------------
+   📄 Tabla de datos generales
+------------------------------- */
+#pressupost-form > form > table {
+    width: 100%;
+    background: #fff;
+    margin-bottom: 1.5rem;
+}
+
+#pressupost-form > form > table td {
+    padding: 1rem;
+    font-size: 1.08rem;
+    vertical-align: middle;
+}
+
+#pressupost-form > form > table input,
+#pressupost-form > form > table select,
+#pressupost-form > form > table textarea {
+    width: 100%;
+    min-width: 180px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+#pressupost-form textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* ------------------------------
+   🧾 Presupuestos - Tabla de líneas
+------------------------------- */
+#pressupost-form .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+#pressupost-form .table {
+    width: 100%;
+    background-color: #f8f9fa;
+    border-radius: 0.75rem;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 0;
+}
+
+#pressupost-form th,
+#pressupost-form td {
+    vertical-align: middle !important;
+    text-align: center;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+/* Solo para la tabla de líneas */
+#pressupost-form .table-linia td input,
+#pressupost-form .table-linia td select {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Para la tabla de datos generales (superior) */
+#pressupost-form > form > table input,
+#pressupost-form > form > table select,
+#pressupost-form > form > table textarea {
+    width: 100%;
+    min-width: 120px;
+    max-width: none;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+#pressupost-form input[readonly] {
+    background-color: #e9ecef;
+}
+
+#pressupost-form .eliminar-linea {
+    min-width: auto;
+    padding: 4px 8px;
+}
+
+/* ------------------------------
+   📐 Ancho por columna
+------------------------------- */
+.table-linia > thead > tr > th:nth-child(1),
+.table-linia > tbody > tr > td:nth-child(1) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(2),
+.table-linia > tbody > tr > td:nth-child(2) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(3),
+.table-linia > tbody > tr > td:nth-child(3) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(4),
+.table-linia > tbody > tr > td:nth-child(4) { width: 7%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(5),
+.table-linia > tbody > tr > td:nth-child(5) { width: 5%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(6),
+.table-linia > tbody > tr > td:nth-child(6) { width: 5%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(7),
+.table-linia > tbody > tr > td:nth-child(7) { width: 2%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(8),
+.table-linia > tbody > tr > td:nth-child(8) { width: 5%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(9),
+.table-linia > tbody > tr > td:nth-child(9) { width: 5%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(10),
+.table-linia > tbody > tr > td:nth-child(10) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(11),
+.table-linia > tbody > tr > td:nth-child(11) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(12),
+.table-linia > tbody > tr > td:nth-child(12) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(13),
+.table-linia > tbody > tr > td:nth-child(13) { width: 5%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(14),
+.table-linia > tbody > tr > td:nth-child(14) { width: 10%; white-space: normal !important; }
+.table-linia > thead > tr > th:nth-child(15),
+.table-linia > tbody > tr > td:nth-child(15) { width: 10%; white-space: normal !important; }
+
+.table-linia th {
+    white-space: normal !important;
+    text-align: center;
+}
+.table-linia td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ------------------------------
+   📱 Adaptación móvil
+------------------------------- */
+@media (max-width: 992px) {
+    #pressupost-form th,
+    #pressupost-form td {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.3rem;
+    }
+
+    #pressupost-form > form > table td {
+        padding: 0.5rem;
+        font-size: 0.98rem;
+    }
+
+    #pressupost-form > form > table input,
+    #pressupost-form > form > table select,
+    #pressupost-form > form > table textarea {
+        min-width: 100px;
+        font-size: 0.95rem;
+    }
 }

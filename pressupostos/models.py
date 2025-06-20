@@ -14,12 +14,12 @@ from projectes.models import (
 
 class Pressupostos(models.Model):
     id_pressupost = models.AutoField(primary_key=True)
+    id_client = models.ForeignKey(Clients, models.DO_NOTHING, db_column='id_client',blank=False, null=False) #buscar clients en app maestros, se filtran los proyectos en base al cliente seleccionado.
     id_projecte = models.ForeignKey(Projectes, models.DO_NOTHING, db_column='id_projecte', blank=False, null=False) #buscar projectes en app projectes
     id_parroquia = models.ForeignKey(Parroquia, models.DO_NOTHING, db_column='id_parroquia', blank=False, null=False) #buscar parroquies en app maestros
     id_ubicacio = models.ForeignKey(Ubicacio, models.DO_NOTHING, db_column='id_ubicacio', blank=False, null=False) #buscar ubicacions en app maestros
     nom_pressupost = models.CharField(max_length=255, blank=True, null=True)
     data_pressupost = models.DateField(default=timezone.now,blank=False, null=False)
-    id_client = models.ForeignKey(Clients, models.DO_NOTHING, db_column='id_client',blank=False, null=False) #buscar clients en app maestros
     observacions = models.CharField(max_length=600, blank=True, null=True)
     tancat = models.BooleanField(default=False)
     datacreacio = models.DateTimeField(db_column='data_creacio', auto_now_add=True)
@@ -44,7 +44,7 @@ class PressupostosLineas(models.Model):
     id_tasca = models.ForeignKey(Tasca, models.DO_NOTHING, db_column='id_tasca') # buscar tasques en app maestros
     quantitat = models.IntegerField() #aqui se tiene que poder poner la cantidad que se desee
     id_recurso = models.ForeignKey(Recurso, models.DO_NOTHING, db_column='id_recurso') # buscar recursos en app maestros
-    preu_tancat = models.IntegerField(blank=True, null=True) # buscar en el modelo recursos e informar el preu tancat (boolean) campo solo lectura
+    preu_tancat = models.BooleanField(blank=True, null=True) # buscar en el modelo recursos e informar el preu tancat (boolean) campo solo lectura
     cost_tancat = models.DecimalField(max_digits=10, decimal_places=4, blank=True, null=True) #si preu tancat es 1, se tiene que habilitar este campo para poner el coste. si preu tancat es 0, este campo no se puede modificar y por defecto se pone a 0
     id_hora = models.ForeignKey(Hores, models.DO_NOTHING, db_column='id_hora', blank=True, null=True) # buscar hores en app maestros
     increment_hores = models.DecimalField(max_digits=5, decimal_places=2) 
@@ -71,3 +71,18 @@ class PressupostosLineas(models.Model):
         return f"L\u00ednea {self.id_pressupost_linea} - Pressupost {self.id_pressupost_id}"
     
 
+from django.contrib.auth.models import User
+
+class PressupostPDFVersion(models.Model):
+    pressupost = models.ForeignKey("Pressupostos", on_delete=models.CASCADE, related_name="pdf_versions")
+    version = models.PositiveIntegerField()
+    archivo = models.FileField(upload_to="pdfs_pressupostos/")
+    generado_por = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    fecha_generado = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('pressupost', 'version')
+        ordering = ['-version']
+
+    def __str__(self):
+        return f"Pressupost #{self.pressupost.id} - Versió {self.version}"
